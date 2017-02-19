@@ -33,6 +33,7 @@ module.exports = {
 
           })
           .then(function(newEvent) {
+            console.log(newEvent)
             res.send(newEvent);
           });
         }
