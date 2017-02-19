@@ -1,6 +1,6 @@
-var userController = require('./userController.js');
-var organizerController = require('./organizerController.js');
-var eventController = require('./eventController.js');
+var userController = require('./controller/userController.js');
+var organizerController = require('./controller/organizerController.js');
+var eventController = require('./controller/eventController.js');
 module.exports = function (app, express) {
 
 app.post('/api/OrgSignup', organizerController.signup);
