@@ -7,26 +7,26 @@ angular.module('event', [
   $routeProvider
   
     .when('/userSignup', {
-      templateUrl: 'app/auth/userSignup.html',
+      templateUrl: 'app/account/signup.html',
       controller: 'AuthController'
     })
 
     .when('/OrgSignup', {
-      templateUrl: 'app/auth/OrgSignup.html',
+      templateUrl: 'app/account/signup.html',
       controller: 'AuthController'
     })
     .when('/orgProfile', {
-      templateUrl: 'app/auth/orgProfile.html',
+      templateUrl: 'app/profile/profile.html',
       controller: 'AuthController',
       authenticate: true
       
     })
     .when('/signin', {
-      templateUrl: 'app/auth/signin.html',
+      templateUrl: 'app/account/signin.html',
       controller: 'AuthController'
     })
     .when('/userProfile', {
-      templateUrl: 'app/auth/userProfile.html',
+      templateUrl: 'app/profile/profile.html',
       controller: 'AuthController',
       authenticate: true
     })
