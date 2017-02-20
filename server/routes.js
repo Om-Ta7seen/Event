@@ -1,16 +1,14 @@
 var userController = require('./controller/userController.js');
-var organizerController = require('./controller/organizerController.js');
 var eventController = require('./controller/eventController.js');
+
 module.exports = function (app, express) {
 
-app.post('/api/OrgSignup', organizerController.signup);
-app.post('/api/userSignup', userController.userSignup);
-app.post('/api/orgProfile', eventController.addEvent);
-app.post('/api/userSignin', userController.signin);
-app.post('/api/orgSignin', organizerController.signin);
+app.post('/api/signup', userController.signup);
+app.post('/api/signin', userController.signin);
+app.post('/api/profile', eventController.addEvent);
 
-
-
-app.get('/api/orgProfile', eventController.getAllEventOrg);
-app.get('/api/userProfile', eventController.getAllEventUser)
+// app.get('/api/users/:username', userController.getUserProfile);
+// app.get('/api/attending-Events', eventController.getAllAttendingEvents);
+// app.get('/api/interesting-In-Events', eventController.getAllInterestingInEvents);
+// app.get('api/same-City-Events', eventController.getSameCityEvents)
 }
