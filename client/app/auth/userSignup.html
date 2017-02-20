@@ -1,0 +1,15 @@
+<div id='signup'>
+  <h1>Signup .. </h1>
+<div>
+  <form name="signupForm" class="col-md-4  animate-box fadeInRight animated-fast" ng-submit="userSignup()"  style=" border-style: dotted solid dashed;border-color: #fc5f05 #0cff2d;" >
+    <input placeholder="username"  type='text' ng-model='user.username' class="form-control ng-pristine ng-untouched ng-valid ng-empty" required>
+    <input placeholder="email"  type="email" ng-model='user.email' class="form-control ng-pristine ng-untouched ng-valid ng-empty" required>
+    <input placeholder="password"  type="password" ng-model='user.password' class="form-control ng-pristine ng-untouched ng-valid ng-empty" required >
+       <select class="form-control ng-pristine ng-untouched ng-valid ng-empty" ng-model="user.eventtype" ng-options="opt for opt in eventType" required>
+  <option disabled selected value> choose type</option>
+  </select>    <button type="submit" class="btn btn-primary logout ">Signup</button>
+  <a href="#/signin">Already have an account? <strong>Signin</strong> ...</a>
+  </form>
+</div>
+
+</div>
