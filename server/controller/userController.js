@@ -48,12 +48,18 @@ module.exports = {
     });
   },
 
-  getUserProfile: function (req, res) {
-    User.where({username: "montaser"}).fetch().then( function (users) {
-      var profile = {};
-      console.log(users)
-      res.json(users)
-    })
+// Event.where({event}).fetch().then( function () {})
 
-  }
+getUserProfile: function (req, res) {
+  var user = req.params.username;
+  // var user = req.params.username;
+  
+  User.where({username: user}).fetch().then( function (user) {
+    // user.set("password", "");
+    console.log(user)
+    user.set('password', "")
+    var profile = {};
+    res.json(user)
+  })
+}
 };
