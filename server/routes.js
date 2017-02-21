@@ -4,7 +4,7 @@ var eventController = require('./controller/eventController.js');
 module.exports = function (app, express) {
 
 
-app.post('api/topEventsByCity/:city', eventController.getTopCityEvents)
+app.get('api/topEventsByCity/:city', eventController.getTopCityEvents)
 app.post('/api/events', eventController.addEvent);
 app.put('/api/events/edit', eventController.editEvent)
 app.delete('/api/events/delete', eventController.deleteEvent)
