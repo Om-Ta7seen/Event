@@ -12,4 +12,5 @@ require('./routes.js')(app , express);
 
 var port = 8080;
 app.listen(process.env.PORT || port);
-console.log('Server now listening on port ' + port);
+
+console.log('Server now listening on port' + port);

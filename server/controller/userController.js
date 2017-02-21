@@ -7,8 +7,8 @@ module.exports = {
 
   signup:function (req,res) {
     var user = req.body;
-    var hashedpass = util.hashpass(user.password,function(hash){
-      hashedpass = hash;
+    util.hashpass(user.password,function(hash){
+      user.password = hash;
     });
     new User({ username: user.username }).fetch().then(function(found) {
      if (found) {
@@ -18,25 +18,25 @@ module.exports = {
        .then(function(newUser) {
         console.log("username in signup    ",newUser);
         var token = jwt.encode(newUser, 'not your bussines!!');
-        user.token = token
-        res.json(user);
+        newUser.set("password", "");
+        newUser.token = token;
+        res.json(newUser);
       });
      }
    });
   },
 
   signin : function(req,res) {
-    var hashedpass = util.hashpass(password,function(hash){
-      hashedpass = hash;
-    });
-
-    new User({ username: req.body.username }).fetch().then(function(found) {
+    var user = req.body
+    new User({ username: user.username }).fetch().then(function(found) {
       if (found) {
         var userHash = found.get('password');
-        util.comparePass(password, userHash, function(exist){
+        util.comparePass(user.password, userHash, function(exist){
           if(exist){
             var token = jwt.encode(found, 'not your bussines!!');
-            res.json({token: token});
+            found.set("password", "");
+            found.token = token;
+            res.json(found);
           }else{
             res.send("password is not correct");
           }
@@ -46,10 +46,14 @@ module.exports = {
         res.status(500).send("user not found");
       }
     });
-  }
+  },
 
-  // getUserProfile: function (req, res) {
-  //     // var username =
-  //     // var password = 
-  //   }
+  getUserProfile: function (req, res) {
+    User.where({username: "montaser"}).fetch().then( function (users) {
+      var profile = {};
+      console.log(users)
+      res.json(users)
+    })
+
+  }
 };
