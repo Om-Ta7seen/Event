@@ -4,53 +4,24 @@ var jwt = require('jwt-simple');
 
 module.exports = {
 
-  // getAllAttendingEvents: function (req, res) {
-
-  // },
-
-  // getAllEnterestingInEvents: function (req, res) {
-
-  // },
-
-  // getSameCityEvents: function (req, res) {
-
-  // },
-
-  addEvent:function (req,res) {
+  addEvent:function (req, res){
     var decoded = jwt.decode(req.body.tok, 'not your bussines!!')
-    var eventName    = req.body.eventName;
-    var type         = req.body.type;
-    var location     = req.body.location;
-    var date         = req.body.date.split("").splice(0,10).join("");
-    var cost         = req.body.cost;
-    var organizerId  = decoded.id;
-    var orgMob       = req.body.orgMob;
-    var orgWebsite   = req.body.orgWebsite;
+    var event = req.body;
 
-    new Event({ eventName: eventName }).fetch().then(function(found) {
-      if (found) {
+    new Event(event).fetch().then(function(found){
+      if (found){
         res.status(200).send("this event is already existed");
-      } else {
-        Events.create({
-          eventName   : eventName,
-          type        : type,
-          location    : location,
-          date        : date,
-          cost        : cost,
-          organizerId : organizerId,
-          orgMob      : orgMob,
-          orgWebsite  : orgWebsite
-
-        })
-        .then(function(newEvent) {
+      } 
+      else{
+        Events.create(event).then(function(newEvent){
           console.log(newEvent)
-          res.send(newEvent);
+          res.json(newEvent);
         });
       }
     });
   },
 
-  getAllEvent : function(req,res){
+  getAll : function(req,res){
     var tok = jwt.decode(req.query.tok, 'not your bussines!!')
     Events.reset().fetch().then(function(events){
       var Orgevents=[];
@@ -74,6 +45,28 @@ module.exports = {
       }
       res.json(UserEvents)
     })
+  },
+
+
+
+  getTopCityEvents: function (req, res) {
+
+  },
+
+  editEvent: function (req, res) {
+
+  },
+
+  deleteEvent: function (req, res) {
+
+  },
+
+  getInterestEvents: function (req, res) {
+
+  },
+
+  getGoingEvents: function (req, res) {
+
   }
 };
 
