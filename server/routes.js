@@ -3,12 +3,16 @@ var eventController = require('./controller/eventController.js');
 
 module.exports = function (app, express) {
 
+
+app.post('api/topEventsByCity/:city', eventController.getTopCityEvents)
+app.post('/api/events', eventController.addEvent);
+app.put('/api/events/edit', eventController.editEvent)
+app.delete('/api/events/delete', eventController.deleteEvent)
+app.get('/api/events', eventController.getAll);
+app.get('/api/events/going', eventController.getGoingEvents);
+app.get('api/events/interested', eventController.getInterestEvents)
+
 app.post('/api/signup', userController.signup);
 app.post('/api/signin', userController.signin);
-app.post('/api/profile', eventController.addEvent);
-
-// app.get('/api/users/:username', userController.getUserProfile);
-// app.get('/api/attending-Events', eventController.getAllAttendingEvents);
-// app.get('/api/interesting-In-Events', eventController.getAllInterestingInEvents);
-// app.get('api/same-City-Events', eventController.getSameCityEvents)
+app.get('/api/users/:username', userController.getUserProfile);
 }

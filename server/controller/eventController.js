@@ -1,16 +1,22 @@
 var Event = require('../model/event.js');
 var Events = require('../collections/events');
+
+var UserAttendEvents = require('../collections/userAttendEvents.js');
+var UserAttendEvent = require('../model/userAttendEvent.js');
+
+var UserInterestEvents = require('../collections/userInterestEvents.js');
+var UserInterestEvent = require('../model/userInterestEvent.js');
+
 var jwt = require('jwt-simple');
 
 module.exports = {
 
   addEvent:function (req, res){
-    var decoded = jwt.decode(req.body.tok, 'not your bussines!!')
     var event = req.body;
-
-    new Event(event).fetch().then(function(found){
-      if (found){
-        res.status(200).send("this event is already existed");
+    //what do u  want to be unique??!!
+    new Event(event.eventName).fetch().then(function(found){
+      if(found){
+        res.status(500).send("This event is already existed");
       } 
       else{
         Events.create(event).then(function(newEvent){
@@ -18,20 +24,41 @@ module.exports = {
           res.json(newEvent);
         });
       }
+    }).catch(function(err){
+      res.status(500).send("Unable to add event");
     });
+
   },
 
   getAll : function(req,res){
-    var tok = jwt.decode(req.query.tok, 'not your bussines!!')
-    Events.reset().fetch().then(function(events){
-      var Orgevents=[];
-      for(var i=0;i<events.models.length;i++){
-        if(tok.id===events.models[i].attributes.organizerId){
-          Orgevents.push(events.models[i].attributes);
-        }
-      }
-      res.json(Orgevents)
-    })
+    var result = []; 
+
+    // Events.reset().fetch().then(function(events){
+    //   if(events.length){
+    //     for(var i = 0; i < events.models.length ; i++){
+    //       result.push(events.models[i].attributes)
+    //       var eventId = result[i].id;
+
+    //       UserInterestEvent.where({eventId: eventId}).count().then(function(interestedCount){
+    //         if(interestedCount){
+    //           result[i].peopleInterested = interestedCount;
+    //         }
+
+    //             console.log(i)
+    //         UserAttendEvent.where({eventId: eventId}).count().then(function(goingCount){
+    //           if(goingCount){
+    //             result[i].peopleGoing = goingCount;
+    //           }
+    //           res.json(result)
+    //         });
+
+    //       }); 
+    //     }
+    //   }
+    //   else{
+    //     res.status(500).send('Unable to find events!');
+    //   }
+    // });
   },
 
   getAllEventUser : function(req,res){
@@ -49,16 +76,40 @@ module.exports = {
 
 
 
-  getTopCityEvents: function (req, res) {
-
+  getTopCityEvents: function (req, res){
+    
   },
 
-  editEvent: function (req, res) {
+  getAllCityEvents: function(req, res){
+    var city = req.params.city;
+    Events.reset().fetch({city: city}).then(function(cityEvents){
+      res.json(cityEvents);
+    }).catch(function(err){
+      res.status(500).send("Unable to find events in ", city);
+    });
+  },
 
+  editEvent: function (req, res){
+    var edit = req.body;
+
+    new Event({id: edit.id}).fetch().then(function(event){
+      delete edit['id']
+      event.set(edit);
+      event.save();
+      res.json("Event is updated");
+    }).catch(function(err){
+      res.status(500).send("Unable to edit event");
+    });
   },
 
   deleteEvent: function (req, res) {
-
+    var id = req.body.id;
+    new Event({id: id}).fetch().then(function(event){
+      event.destroy();
+      res.json("Event deleted.");
+    }).catch(function(err){
+      res.status(500).send("Unable to delete event");
+    });
   },
 
   getInterestEvents: function (req, res) {
