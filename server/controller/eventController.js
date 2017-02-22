@@ -33,32 +33,39 @@ module.exports = {
   getAll : function(req,res){
     var result = []; 
 
-    Events.reset().fetch().then(function(events){
-      if(events.length){
-        for(var i = 0; i < events.models.length ; i++){
-          result.push(events.models[i].attributes)
-          var eventId = result[i].id;
+    // Events.reset().fetch().then(function(events){
+    //   if(events.length){
+    //     for(var i = 0; i < events.models.length ; i++){
+    //       result.push(events.models[i].attributes)
+    //       var eventId = result[i].id;
 
-          UserInterestEvent.where({eventId: eventId}).count().then(function(interestedCount){
-            if(interestedCount){
-              result[i].peopleInterested = interestedCount;
-            }
+    //       UserInterestEvent.where({eventId: eventId}).count().then(function(interestedCount){
+    //         if(interestedCount){
+    //           result[i].peopleInterested = interestedCount;
+    //         }
 
-                console.log(i)
-            UserAttendEvent.where({eventId: eventId}).count().then(function(goingCount){
-              if(goingCount){
-                result[i].peopleGoing = goingCount;
-              }
-              res.json(result)
-            });
+    //             console.log(i)
+    //         UserAttendEvent.where({eventId: eventId}).count().then(function(goingCount){
+    //           if(goingCount){
+    //             result[i].peopleGoing = goingCount;
+    //           }
+    //           res.json(result)
+    //         });
 
-          }); 
-        }
-      }
-      else{
-        res.status(500).send('Unable to find events!');
-      }
+    //       }); 
+    //     }
+    //   }
+    //   else{
+    //     res.status(500).send('Unable to find events!');
+    //   }
+    // });
+    // 
+
+    UserAttendEvents.reset().query('where', 'eventId', 1).fetch({withRelated: ['user']}).then(function(result){
+      console.log(result.models)
+      res.json(result);
     });
+
   },
 
   getAllEventUser : function(req,res){
@@ -83,9 +90,12 @@ module.exports = {
   getAllCityEvents: function(req, res){
     var city = req.params.city;
     Events.reset().fetch({city: city}).then(function(cityEvents){
-      res.json(cityEvents);
-    }).catch(function(err){
-      res.status(500).send("Unable to find events in ", city);
+      if(cityEvents.length){
+        res.json(cityEvents);
+      }
+      else{
+        res.status(500).send("Unable to find events in ", city);
+      }
     });
   },
 
@@ -93,7 +103,7 @@ module.exports = {
     var edit = req.body;
 
     new Event({id: edit.id}).fetch().then(function(event){
-      delete edit['id']
+      delete edit['id'];
       event.set(edit);
       event.save();
       res.json("Event is updated");
