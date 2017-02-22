@@ -4,8 +4,7 @@ var knex = require('knex');
 
 var Event = db.Model.extend({
 	tableName: 'events',
-	hasTimestamps: true,
-	
+	hasTimestamps: true
 });
 
 module.exports = Event;
