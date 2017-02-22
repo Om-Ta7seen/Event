@@ -35,7 +35,6 @@ module.exports = {
    });
   },
 
-
   signin : function(req,res) {
     var user = req.body
     new User({ username: user.username }).fetch().then(function(found) {
@@ -58,32 +57,31 @@ module.exports = {
     });
   },
 
-
   getUserProfile: function (req, res) {
     var user = req.params.username;
-    user.set('password', "")
     var profile = {
       attendEvents: [],
       createdEvents: [],
       interestEvents: []
     };
-    profile.user = user
 
     User.where({username: user}).fetch().then( function (user) {  
+      profile.user = user
+      user.set('password', "")
       Events.reset().fetch({userId: user.id}).then( function (events) {
-        console.log(events)
         profile['createdEvents'].push(events)
+        UserAttendEvents.reset().query('where', 'userId', user.id).fetch({withRelated: ['event']}).then(function(result){
+         for (var i = 0; i < result.models.length; i++) {
+          profile['attendEvents'].push(result.models[i].relations)
+        }
+        UserInterestEvents.reset().query('where', 'userId', user.id).fetch({withRelated: ['event']}).then(function(result){
+          for (var i = 0; i < result.models.length; i++) {
+            profile['interestEvents'].push(result.models[i].relations)
+          }
+          res.json(profile);
+        });
+      });
       })
-
-      UserAttendEvents.reset().query('where', 'userId', user.id).fetch({withRelated: ['event']}).then(function(result){
-        profile['attendEvents'].push(result)
-      });
-
-      UserInterestEvents.reset().query('where', 'userId', user.id).fetch({withRelated: ['event']}).then(function(result){
-        profile['interestEvents'].push(result)
-      });
-
-      res.json(profile);
     })
   }
-  };
+}
