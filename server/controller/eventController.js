@@ -14,7 +14,7 @@ module.exports = {
   addEvent:function (req, res){
     var event = req.body;
     //what do u  want to be unique??!!
-    new Event(event.eventName).fetch().then(function(found){
+    new Event({eventName: event.eventName}).fetch().then(function(found){
       if(found){
         res.status(500).send("This event is already existed");
       } 
@@ -33,32 +33,32 @@ module.exports = {
   getAll : function(req,res){
     var result = []; 
 
-    // Events.reset().fetch().then(function(events){
-    //   if(events.length){
-    //     for(var i = 0; i < events.models.length ; i++){
-    //       result.push(events.models[i].attributes)
-    //       var eventId = result[i].id;
+    Events.reset().fetch().then(function(events){
+      if(events.length){
+        for(var i = 0; i < events.models.length ; i++){
+          result.push(events.models[i].attributes)
+          var eventId = result[i].id;
 
-    //       UserInterestEvent.where({eventId: eventId}).count().then(function(interestedCount){
-    //         if(interestedCount){
-    //           result[i].peopleInterested = interestedCount;
-    //         }
+          UserInterestEvent.where({eventId: eventId}).count().then(function(interestedCount){
+            if(interestedCount){
+              result[i].peopleInterested = interestedCount;
+            }
 
-    //             console.log(i)
-    //         UserAttendEvent.where({eventId: eventId}).count().then(function(goingCount){
-    //           if(goingCount){
-    //             result[i].peopleGoing = goingCount;
-    //           }
-    //           res.json(result)
-    //         });
+                console.log(i)
+            UserAttendEvent.where({eventId: eventId}).count().then(function(goingCount){
+              if(goingCount){
+                result[i].peopleGoing = goingCount;
+              }
+              res.json(result)
+            });
 
-    //       }); 
-    //     }
-    //   }
-    //   else{
-    //     res.status(500).send('Unable to find events!');
-    //   }
-    // });
+          }); 
+        }
+      }
+      else{
+        res.status(500).send('Unable to find events!');
+      }
+    });
   },
 
   getAllEventUser : function(req,res){
