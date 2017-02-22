@@ -14,7 +14,7 @@ module.exports = {
   addEvent:function (req, res){
     var event = req.body;
     //what do u  want to be unique??!!
-    new Event(event.eventName).fetch().then(function(found){
+    new Event({eventName: event.eventName}).fetch().then(function(found){
       if(found){
         res.status(500).send("This event is already existed");
       } 
@@ -59,6 +59,13 @@ module.exports = {
     //     res.status(500).send('Unable to find events!');
     //   }
     // });
+    // 
+
+    UserAttendEvents.reset().query('where', 'eventId', 1).fetch({withRelated: ['user']}).then(function(result){
+      console.log(result.models)
+      res.json(result);
+    });
+
   },
 
   getAllEventUser : function(req,res){
@@ -83,9 +90,12 @@ module.exports = {
   getAllCityEvents: function(req, res){
     var city = req.params.city;
     Events.reset().fetch({city: city}).then(function(cityEvents){
-      res.json(cityEvents);
-    }).catch(function(err){
-      res.status(500).send("Unable to find events in ", city);
+      if(cityEvents.length){
+        res.json(cityEvents);
+      }
+      else{
+        res.status(500).send("Unable to find events in ", city);
+      }
     });
   },
 
@@ -93,7 +103,7 @@ module.exports = {
     var edit = req.body;
 
     new Event({id: edit.id}).fetch().then(function(event){
-      delete edit['id']
+      delete edit['id'];
       event.set(edit);
       event.save();
       res.json("Event is updated");
