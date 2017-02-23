@@ -1,38 +1,31 @@
 angular.module('event', [
   'event.services',
   'event.auth',
+  'event.main',
+  'event.profile',
   'ngRoute'
 ])
 .config(function ($routeProvider, $httpProvider,$locationProvider) {
   $routeProvider
   
-    .when('/userSignup', {
+    .when('/signup', {
       templateUrl: 'app/account/signup.html',
       controller: 'AuthController'
-    })
-
-    .when('/OrgSignup', {
-      templateUrl: 'app/account/signup.html',
-      controller: 'AuthController'
-    })
-    .when('/orgProfile', {
-      templateUrl: 'app/profile/profile.html',
-      controller: 'AuthController',
-      authenticate: true
-      
     })
     .when('/signin', {
       templateUrl: 'app/account/signin.html',
       controller: 'AuthController'
     })
-    .when('/userProfile', {
+    .when('/profile/:user', {
       templateUrl: 'app/profile/profile.html',
-      controller: 'AuthController',
-      authenticate: true
+      controller: 'ProfileController',
+    })
+    .when('/', {
+      templateUrl: 'app/main/main.html',
+      controller: 'MainController',
     })
 
-
-    .otherwise({redirectTo:'/signin'})
+    .otherwise({redirectTo:'/'})
 
     $locationProvider.hashPrefix('');
     $httpProvider.interceptors.push('AttachTokens')

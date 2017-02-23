@@ -3,7 +3,7 @@ angular.module('event.services', [])
 
 .factory('Auth', function ($http, $location, $window) {
  
-  var userSignin = function (user) {
+  var signin = function (user) {
     return $http({
       method: 'POST',
       url: '/api/userSignin',
@@ -14,7 +14,7 @@ angular.module('event.services', [])
     });
   };
 
-  var userSignup = function (user) {
+  var signup = function (user) {
   console.log(user)
     return $http({
       method: 'POST',
@@ -25,40 +25,7 @@ angular.module('event.services', [])
      return resp.data.token;
     });
   };
-   var OrgSignin = function (org) {
-    return $http({
-      method: 'POST',
-      url: '/api/orgSignin',
-      data: org
-    })
-    .then(function (resp) {
 
-       return resp.data.token;
-    });
-  };
-
-  var OrgSignup = function(org){
-    return $http({
-      method: 'POST',
-      url: '/api/OrgSignup',
-      data: org
-    })
-    .then(function (resp) {
-       return resp.data.token;
-    });
-  };
-
-  var createEvent = function(event){
-  	return $http({
-  		method : 'POST',
-  		url :'/api/orgProfile',
-  		data : event
-  	})
-  	.then(function(event){
-  		return event
-  	});
-  }
-  
   var isAuth = function () {
     return !!$window.localStorage.getItem('com.event');
   };
@@ -68,15 +35,38 @@ angular.module('event.services', [])
     $location.path('/signin');
   };
 
-  var getUserEvent = function (tok){
+  return {
+    signin : signin,
+    signup : signup,
+    isAuth: isAuth,
+    signout: signout
+  };
+})
+
+.factory('Events', function(){
+
+  var addEvent = function(event){
+    return $http({
+      method : 'POST',
+      url :'/api/events',
+      data : event
+    })
+    .then(function(event){
+      return event
+    });
+  };
+
+
+  var getUserProfile = function (username){
     return $http ({
       method : 'GET',
-      url : '/api/userProfile',
-      params:{tok:tok}
+      url : '/api/users/' + username
     }).then(function (resp) {
       return resp.data;
     });
   };
+
+
   var getOrgEvent = function (tok){
     return $http ({
       method : 'GET',
@@ -88,14 +78,7 @@ angular.module('event.services', [])
   };
 
   return {
-    userSignin : userSignin ,
-    OrgSignin : OrgSignin,
-    userSignup: userSignup,
-    OrgSignup : OrgSignup,
-    createEvent : createEvent,
-    isAuth: isAuth,
-    signout: signout,
-    getUserEvent : getUserEvent,
-    getOrgEvent : getOrgEvent
-  };
-});
+    
+  }
+  
+})
