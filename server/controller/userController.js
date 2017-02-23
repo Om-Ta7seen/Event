@@ -58,30 +58,16 @@ module.exports = {
   },
 
   getUserProfile: function (req, res) {
-    var user = req.params.username;
-    var profile = {
-      attendEvents: [],
-      createdEvents: [],
-      interestEvents: []
-    };
+    var username = req.params.username;
 
-    Users.reset().query('where', 'username', user).fetch({withRelated: ['event', 'interest', 'attend']}).then( function (user) {  
-      profile.user = user.models[0].attributes;
-      res.json(user)
-      console.log(profile.user)
-      user.set('password', "")
-      // profile['createdEvents'].push(events)        
-    //   UserAttendEvents.reset().query('where', 'userId', user.id).fetch({withRelated: ['event']}).then(function(result){
-    //    for (var i = 0; i < result.models.length; i++) {
-    //     profile['attendEvents'].push(result.models[i].relations)
-    //   }
-    //   UserInterestEvents.reset().query('where', 'userId', user.id).fetch({withRelated: ['event']}).then(function(result){
-    //     for (var i = 0; i < result.models.length; i++) {
-    //       profile['interestEvents'].push(result.models[i].relations)
-    //     }
-    //     res.json(profile);
-    //   });
-    // });
+    Users.reset().query('where', 'username', username).fetch({withRelated: ['event', 'interest', 'attend']}).then( function (found) {
+      if(found.length) {
+        found.models[0].attributes.password =  "";
+        res.json(found);      
+      }  
+      else {
+        res.status(500).send('There is nothing to show')
+      }
     })
   },
 
