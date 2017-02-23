@@ -58,16 +58,11 @@ module.exports = {
 
   getTopCityEvents: function (req, res){
     var city = req.params.city;
-    var going = [];
+    
     Events.reset().fetch({city: city}).then(function(events){
-      // UserAttendEvents.reset().query('where', 'eventId', event.attributes.id).fetch({withRelated: ['user']}).then(function(result){
-      //   if(result.models.length){
-      //     for (var i = 0; i < result.models.length; i++) {
-      //       going.push(result.models[i].relations)
-      //     }
-      //   }
-      //   res.json(going);
-      // });
+        if(result.models.length){
+        }
+        res.json(going);
     })
   },
 
