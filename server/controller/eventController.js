@@ -1,5 +1,6 @@
 var Event = require('../model/event.js');
 var Events = require('../collections/events');
+var Users = require('../collections/users');
 
 var UserAttendEvents = require('../collections/userAttendEvents.js');
 var UserAttendEvent = require('../model/userAttendEvent.js');
@@ -20,7 +21,6 @@ module.exports = {
       } 
       else{
         Events.create(event).then(function(newEvent){
-          console.log(newEvent)
           res.json(newEvent);
         });
       }
@@ -31,60 +31,44 @@ module.exports = {
   },
 
   getAll : function(req,res){
-    var result = []; 
-
-    // Events.reset().fetch().then(function(events){
-    //   if(events.length){
-    //     for(var i = 0; i < events.models.length ; i++){
-    //       result.push(events.models[i].attributes)
-    //       var eventId = result[i].id;
-
-    //       UserInterestEvent.where({eventId: eventId}).count().then(function(interestedCount){
-    //         if(interestedCount){
-    //           result[i].peopleInterested = interestedCount;
-    //         }
-
-    //             console.log(i)
-    //         UserAttendEvent.where({eventId: eventId}).count().then(function(goingCount){
-    //           if(goingCount){
-    //             result[i].peopleGoing = goingCount;
-    //           }
-    //           res.json(result)
-    //         });
-
-    //       }); 
-    //     }
-    //   }
-    //   else{
-    //     res.status(500).send('Unable to find events!');
-    //   }
-    // });
-    // 
-
-    UserAttendEvents.reset().query('where', 'eventId', 1).fetch({withRelated: ['user']}).then(function(result){
-      console.log(result.models)
-      res.json(result);
-    });
-
-  },
-
-  getAllEventUser : function(req,res){
-    var tokk = jwt.decode(req.query.tok, 'not your bussines!!')
-    Events.reset().fetch().then(function(events){
-      var UserEvents=[];
-      for(var i=0;i<events.models.length;i++){
-        if(tokk.eventtype===events.models[i].attributes.type){
-          UserEvents.push(events.models[i].attributes);
-        }
+    Events.reset().fetch({withRelated: ['attend','interest']}).then(function(events){
+      if(events.length){
+        res.json(events)
       }
-      res.json(UserEvents)
-    })
+      else{
+        res.status(500).send('Unable to find events!');
+      }
+    });
   },
+
+  // getAllEventUser : function(req,res){
+  //   var tokk = jwt.decode(req.query.tok, 'not your bussines!!')
+  //   Events.reset().fetch().then(function(events){
+  //     var UserEvents=[];
+  //     for(var i=0;i<events.models.length;i++){
+  //       if(tokk.eventtype===events.models[i].attributes.type){
+  //         UserEvents.push(events.models[i].attributes);
+  //       }
+  //     }
+  //     res.json(UserEvents)
+  //   })
+  // },
 
 
 
   getTopCityEvents: function (req, res){
-    
+    var city = req.params.city;
+    var going = [];
+    Events.reset().fetch({city: city}).then(function(events){
+      // UserAttendEvents.reset().query('where', 'eventId', event.attributes.id).fetch({withRelated: ['user']}).then(function(result){
+      //   if(result.models.length){
+      //     for (var i = 0; i < result.models.length; i++) {
+      //       going.push(result.models[i].relations)
+      //     }
+      //   }
+      //   res.json(going);
+      // });
+    })
   },
 
   getAllCityEvents: function(req, res){
@@ -119,11 +103,12 @@ module.exports = {
       event.destroy();
       res.json("Event deleted.");
     }).catch(function(err){
-      res.status(500).send("Unable to delete event");
+      res.status(500).send("Unable to delete event ");
     });
   },
 
   getInterestEvents: function (req, res) {
+  
 
   },
 

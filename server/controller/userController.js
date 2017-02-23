@@ -65,21 +65,23 @@ module.exports = {
       interestEvents: []
     };
 
-    User.where({username: user}).fetch({withRelated: ['event']}).then( function (user) {  
-      profile.user = user
+    Users.reset().query('where', 'username', user).fetch({withRelated: ['event', 'interest', 'attend']}).then( function (user) {  
+      profile.user = user.models[0].attributes;
+      res.json(user)
+      console.log(profile.user)
       user.set('password', "")
-      profile['createdEvents'].push(events)        
-      UserAttendEvents.reset().query('where', 'userId', user.id).fetch({withRelated: ['event']}).then(function(result){
-       for (var i = 0; i < result.models.length; i++) {
-        profile['attendEvents'].push(result.models[i].relations)
-      }
-      UserInterestEvents.reset().query('where', 'userId', user.id).fetch({withRelated: ['event']}).then(function(result){
-        for (var i = 0; i < result.models.length; i++) {
-          profile['interestEvents'].push(result.models[i].relations)
-        }
-        res.json(profile);
-      });
-    });
+      // profile['createdEvents'].push(events)        
+    //   UserAttendEvents.reset().query('where', 'userId', user.id).fetch({withRelated: ['event']}).then(function(result){
+    //    for (var i = 0; i < result.models.length; i++) {
+    //     profile['attendEvents'].push(result.models[i].relations)
+    //   }
+    //   UserInterestEvents.reset().query('where', 'userId', user.id).fetch({withRelated: ['event']}).then(function(result){
+    //     for (var i = 0; i < result.models.length; i++) {
+    //       profile['interestEvents'].push(result.models[i].relations)
+    //     }
+    //     res.json(profile);
+    //   });
+    // });
     })
   },
 
