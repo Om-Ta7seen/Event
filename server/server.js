@@ -10,7 +10,7 @@ app.use(express.static(__dirname + '/../client'));
 
 require('./routes.js')(app , express);
 
-var port = 8080;
+var port = 8000;
 app.listen(process.env.PORT || port);
 
 console.log('Server now listening on port' + port);
