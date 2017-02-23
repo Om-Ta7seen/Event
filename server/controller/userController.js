@@ -1,5 +1,15 @@
 var User = require('../model/user.js');
 var Users = require('../collections/users');
+
+var Event = require('../model/event.js');
+var Events = require('../collections/events.js');
+
+var UserAttendEvent = require('../model/userAttendEvent.js')
+var UserAttendEvents = require('../collections/userAttendEvents.js');
+
+var UserInterestEvent = require('../model/userInterestEvent.js')
+var UserInterestEvents = require('../collections/userInterestEvents.js')
+
 var util = require('../lib/utility.js');
 var jwt = require('jwt-simple');
 
@@ -16,7 +26,6 @@ module.exports = {
      } else {
        Users.create(user)
        .then(function(newUser) {
-        console.log("username in signup    ",newUser);
         var token = jwt.encode(newUser, 'not your bussines!!');
         newUser.set("password", "");
         newUser.token = token;
@@ -48,18 +57,31 @@ module.exports = {
     });
   },
 
-// Event.where({event}).fetch().then( function () {})
+  getUserProfile: function (req, res) {
+    var user = req.params.username;
+    var profile = {
+      attendEvents: [],
+      createdEvents: [],
+      interestEvents: []
+    };
 
-getUserProfile: function (req, res) {
-  var user = req.params.username;
-  // var user = req.params.username;
-  
-  User.where({username: user}).fetch().then( function (user) {
-    // user.set("password", "");
-    console.log(user)
-    user.set('password', "")
-    var profile = {};
-    res.json(user)
-  })
+    User.where({username: user}).fetch().then( function (user) {  
+      profile.user = user
+      user.set('password', "")
+      Events.reset().fetch({userId: user.id}).then( function (events) {
+        profile['createdEvents'].push(events)
+        UserAttendEvents.reset().query('where', 'userId', user.id).fetch({withRelated: ['event']}).then(function(result){
+         for (var i = 0; i < result.models.length; i++) {
+          profile['attendEvents'].push(result.models[i].relations)
+        }
+        UserInterestEvents.reset().query('where', 'userId', user.id).fetch({withRelated: ['event']}).then(function(result){
+          for (var i = 0; i < result.models.length; i++) {
+            profile['interestEvents'].push(result.models[i].relations)
+          }
+          res.json(profile);
+        });
+      });
+      })
+    })
+  }
 }
-};
