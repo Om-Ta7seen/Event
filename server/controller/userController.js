@@ -65,23 +65,58 @@ module.exports = {
       interestEvents: []
     };
 
-    User.where({username: user}).fetch().then( function (user) {  
+    User.where({username: user}).fetch({withRelated: ['event']}).then( function (user) {  
       profile.user = user
       user.set('password', "")
-      Events.reset().fetch({userId: user.id}).then( function (events) {
-        profile['createdEvents'].push(events)
-        UserAttendEvents.reset().query('where', 'userId', user.id).fetch({withRelated: ['event']}).then(function(result){
-         for (var i = 0; i < result.models.length; i++) {
-          profile['attendEvents'].push(result.models[i].relations)
+      profile['createdEvents'].push(events)        
+      UserAttendEvents.reset().query('where', 'userId', user.id).fetch({withRelated: ['event']}).then(function(result){
+       for (var i = 0; i < result.models.length; i++) {
+        profile['attendEvents'].push(result.models[i].relations)
+      }
+      UserInterestEvents.reset().query('where', 'userId', user.id).fetch({withRelated: ['event']}).then(function(result){
+        for (var i = 0; i < result.models.length; i++) {
+          profile['interestEvents'].push(result.models[i].relations)
         }
-        UserInterestEvents.reset().query('where', 'userId', user.id).fetch({withRelated: ['event']}).then(function(result){
-          for (var i = 0; i < result.models.length; i++) {
-            profile['interestEvents'].push(result.models[i].relations)
-          }
-          res.json(profile);
-        });
+        res.json(profile);
       });
-      })
+    });
     })
+  },
+
+  addAttending: function (req, res) {
+    var attend = req.body
+    // console.log(userId)
+    new UserAttendEvent(attend).fetch().then(function(found){
+      if(found){
+        console.log(found)
+        res.status(500).send("This user is already attending");
+      } 
+      else{
+        UserAttendEvents.create(attend).then(function(newAttend){
+          console.log(newAttend)
+          res.json(newAttend);
+        });
+      }
+    }).catch(function(err){
+      res.status(500).send("Unable to add the user to the attending table");
+    });
+  },
+
+  addInteresting: function (req, res) {
+    var interest = req.body
+    new UserInterestEvent(interest).fetch().then(function(found){
+      if(found){
+        console.log(found)
+        res.status(500).send("This user is already inteested");
+      } 
+      else{
+        UserInterestEvents.create(interest).then(function(newInterest){
+          console.log(newInterest)
+          res.json(newInterest);
+        });
+      }
+    }).catch(function(err){
+      res.status(500).send("Unable to add the user to the interested table");
+    });
   }
 }
