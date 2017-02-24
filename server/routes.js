@@ -9,7 +9,7 @@ app.get('api/topEventsByCity/:city', eventController.getTopCityEvents)
 app.post('/api/events', eventController.addEvent);
 app.get('/api/events', eventController.getAll);
 app.put('/api/events/edit', eventController.editEvent)
-app.delete('/api/events/delete', eventController.deleteEvent)
+app.post('/api/events/delete', eventController.deleteEvent)
 app.post('/api/events/attending', userController.addAttending)
 app.post('/api/events/interested', userController.addInteresting)
 

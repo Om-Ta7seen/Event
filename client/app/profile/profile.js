@@ -1,7 +1,14 @@
 angular.module('event.profile', [])
 
-.controller('ProfileController', function ($scope, $routeParams, $window, $location, Events) {
+.controller('ProfileController', function ($scope, $routeParams, $window, $location, Events, EventService) {
   $scope.data = {};
+  $scope.isUserProfile = false;
+
+  if($window.localStorage.getItem('com.event')){
+  	if($window.localStorage.getItem('com.event').username = $routeParams.user){
+  		$scope.isUserProfile = true;
+  	}
+  }
 
 	Events.getUserProfile($routeParams.user).then(function(data) {
 		console.log(data)
@@ -12,10 +19,6 @@ angular.module('event.profile', [])
 		}
 	});
 
- //  	$scope.setOrder = function(UserID, cookerID, cookNameID, FullName, cookName){
-	// 	OrderService.setOrder({userID: UserID, cookerID : cookerID,
-	// 		 CookNamesID: cookNameID, FullName : FullName, cookName: cookName});
-	// }
 
 	$scope.addEvent = function(){
 		$scope.event.userId = JSON.parse($window.localStorage.getItem('com.event')).id;
@@ -57,6 +60,42 @@ angular.module('event.profile', [])
   		} else {
   			$location.path('/signin');
   		}
+  	}
+
+  	$scope.getEventInfo = function(){
+  		$scope.event = EventService.getEvent();
+  	}
+
+  	$scope.setEditEvent = function(event){
+  		EventService.setEvent(event);
+  		$location.path('/editEvent');
+  	}
+
+  	$scope.editEvent = function(){
+		//$scope.event.userId = $window.localStorage.getItem('com.event');
+		Events.editEvent($scope.event).then(function(data){
+			if(data.status === 500){
+				alert('Something went wrong!');
+			} else {
+				$window.history.back();
+			}
+		})
+  	}
+
+  	$scope.deleteEvent = function(eventId){
+  		Events.deleteEvent(eventId).then(function(data){
+		  	if(data.status === 500){
+				alert('Something went wrong!');
+			} else {
+				alert('Event deleted!');
+				Events.getUserProfile($routeParams.user).then(function(data) {
+					console.log(data)
+					if(data){
+						$scope.data = data;	
+					}
+				});
+			}
+		})
   	}
 
 });

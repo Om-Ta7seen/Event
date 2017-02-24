@@ -69,7 +69,12 @@
 
       <h4>Category :</h4>
       <div class="list-group" ng-init="catSelect = {category: ''}">
-        <a class="list-group-item" style="cursor: hand;" ng-repeat="item in data.events" ng-click="catSelect.category = item.category">{{ item.category }}</a>
+        <a class="list-group-item" style="cursor: hand;" ng-click="catSelect.category = 'activites'">Activites</a>
+        <a class="list-group-item" style="cursor: hand;" ng-click="catSelect.category = 'music'">Music</a>
+        <a class="list-group-item" style="cursor: hand;" ng-click="catSelect.category = 'it'">IT</a>
+        <a class="list-group-item" style="cursor: hand;" ng-click="catSelect.category = 'sports'">Sports</a>
+        <a class="list-group-item" style="cursor: hand;" ng-click="catSelect.category = 'info'">Informatic</a>
+
         <a class="list-group-item" style="cursor: hand;" ng-click="catSelect.category = ''">All categories</a>
       </div><div class="navbar-form" role="search" style="margin-bottom: 20px;">
       <div class="col-xs-12">

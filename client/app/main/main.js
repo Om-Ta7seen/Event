@@ -8,7 +8,7 @@ angular.module('event.main', [])
   	// });
 
   	$scope.getCityEvents = function(city){
-  		Events.getAllEvents().then(function(data){
+  		Events.getAllCityEvents(city).then(function(data){
   			console.log(data);
   			$scope.data.events = data;
   		});
