@@ -86,15 +86,6 @@ module.exports = {
     }).catch(function(err){
       res.status(500).send("Unable to delete event ");
     });
-  },
-
-  getInterestEvents: function (req, res) {
-  
-
-  },
-
-  getGoingEvents: function (req, res) {
-
   }
 };
 
