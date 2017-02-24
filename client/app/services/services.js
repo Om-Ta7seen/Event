@@ -1,7 +1,7 @@
 angular.module('event.services', [])
 
 
-.factory('Auth', function ($http, $location, $window) {
+.factory('Auth', function ($http, $rootScope, $location, $window) {
  
   var signin = function (user) {
     return $http({
