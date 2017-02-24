@@ -103,18 +103,20 @@ span.input-group-addon i {
   text-align: center;
 }
 </style>
+
 <div class="container">
       <div class="row main">
         <div class="main-login main-center">
-        <h5>Sign up once and watch any of our free demos.</h5>
-          <form class="" method="post" action="#">
+        <h2>Sign Up</h2>
+        <h5>Register and enjoy our great list of events!</h5>
+          <form>
             
             <div class="form-group">
-              <label for="name" class="cols-sm-2 control-label">Your Name</label>
+              <label for="name" class="cols-sm-2 control-label">Your Full Name</label>
               <div class="cols-sm-10">
                 <div class="input-group">
                   <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
-                  <input type="text" class="form-control" name="name" id="name"  placeholder="Enter your Name"/>
+                  <input type="text" class="form-control" name="name" id="name"  placeholder="Enter your Name" ng-model="user.fullName"/>
                 </div>
               </div>
             </div>
@@ -124,7 +126,40 @@ span.input-group-addon i {
               <div class="cols-sm-10">
                 <div class="input-group">
                   <span class="input-group-addon"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
-                  <input type="text" class="form-control" name="email" id="email"  placeholder="Enter your Email"/>
+                  <input type="text" class="form-control" name="email" id="email"  placeholder="Enter your Email" ng-model="user.email"/>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="email" class="cols-sm-2 control-label">Your City</label>
+              <div class="cols-sm-10">
+                <div class="input-group" style="width: 100%">
+                  <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="width: 100%;"> 
+                      <span ng-if="user.city === ''">choose your city</span>
+                      <span ng-if="user.city">{{ user.city }}</span>
+                      <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" ng-model="citySelect" ng-init="user.city=''">
+                      <li><a ng-click="user.city='amman'">Amman</a></li>
+                      <li><a ng-click="user.city='irbid'">Irbid</a></li>
+                      <li><a hng-click="user.city='aqaba'">Aqaba</a></li>
+                      <li><a ng-click="user.city='mafraq'">Mafraq</a></li>
+                      <li><a ng-click="user.city='ajloun'">Ajloun</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="orgName" class="cols-sm-2 control-label">Your Orgnization Name
+              </label>
+              <div class="cols-sm-10">
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
+                  <input type="text" class="form-control" name="orgName" id="orgName"  placeholder="your orgnization name" ng-model="user.orgName"/>
                 </div>
               </div>
             </div>
@@ -133,8 +168,8 @@ span.input-group-addon i {
               <label for="username" class="cols-sm-2 control-label">Username</label>
               <div class="cols-sm-10">
                 <div class="input-group">
-                  <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
-                  <input type="text" class="form-control" name="username" id="username"  placeholder="Enter your Username"/>
+                  <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+                  <input type="text" class="form-control" name="username" id="username"  placeholder="Enter your Username"  ng-model="user.username"/>
                 </div>
               </div>
             </div>
@@ -144,7 +179,7 @@ span.input-group-addon i {
               <div class="cols-sm-10">
                 <div class="input-group">
                   <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
-                  <input type="password" class="form-control" name="password" id="password"  placeholder="Enter your Password"/>
+                  <input type="password" class="form-control" name="password" id="password"  placeholder="Enter your Password"  ng-model="user.password"/>
                 </div>
               </div>
             </div>
@@ -159,8 +194,18 @@ span.input-group-addon i {
               </div>
             </div>
 
+            <div class="form-group">
+              <label for="confirm" class="cols-sm-2 control-label">Upload profile image</label>
+              <div class="cols-sm-10">
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-file-image-o" aria-hidden="true"></i></span>
+                  <input type="file" class="form-control" placeholder="Confirm your Password"/>
+                </div>
+              </div>
+            </div>
+
             <div class="form-group ">
-              <input type="submit" value="Sign in" ng-click="signup()" target="_blank" id="button" class="btn btn-primary btn-lg btn-block login-button" />
+              <input type="submit" value="Sign Up" ng-click="signup()" id="button" class="btn btn-primary btn-lg btn-block login-button" />
             </div>
             
           </form>

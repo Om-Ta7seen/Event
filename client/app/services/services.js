@@ -6,11 +6,11 @@ angular.module('event.services', [])
   var signin = function (user) {
     return $http({
       method: 'POST',
-      url: '/api/userSignin',
+      url: '/api/signin',
       data: user
     })
     .then(function (resp) {
-      return resp.data.token;
+      return resp.data;
     });
   };
 
@@ -18,11 +18,11 @@ angular.module('event.services', [])
   console.log(user)
     return $http({
       method: 'POST',
-      url: '/api/userSignup',
+      url: '/api/signup',
       data: user
     })
     .then(function (resp) {
-     return resp.data.token;
+     return resp.data;
     });
   };
 
@@ -32,7 +32,8 @@ angular.module('event.services', [])
 
   var signout = function () {
     $window.localStorage.removeItem('com.event');
-    $location.path('/signin');
+    $rootScope.isLoggedIn = false;
+    $location.path('/');
   };
 
   return {
@@ -43,7 +44,7 @@ angular.module('event.services', [])
   };
 })
 
-.factory('Events', function(){
+.factory('Events', function($http){
 
   var addEvent = function(event){
     return $http({
@@ -67,18 +68,59 @@ angular.module('event.services', [])
   };
 
 
-  var getOrgEvent = function (tok){
+  var getAllEvents = function (){
     return $http ({
       method : 'GET',
-      url : '/api/orgProfile',
-      params:{tok:tok}
+      url : '/api/events'
+      // params:{tok:tok}
     }).then(function (resp) {
       return resp.data;
     });
   };
 
+  var getAllCityEvents = function (city){
+    return $http ({
+      method : 'GET',
+      url : '/api/events/'+city
+      // params:{tok:tok}
+    }).then(function (resp) {
+      return resp.data;
+    });
+  };
+
+  var attendEvent = function(eventId, userId){
+    return $http ({
+      method : 'POST',
+      url : '/api/events/attending',
+      data : {eventId: eventId, userId : userId}
+    }).then(function (resp) {
+      return resp;
+    }).catch(function (err) {
+      if(err)
+      return {status:500};
+    });
+  }
+
+  var interestEvent = function(eventId, userId){
+    return $http ({
+      method : 'POST',
+      url : '/api/events/interested',
+      data : {eventId: eventId, userId : userId}
+    }).then(function (resp) {
+      return resp;
+    }).catch(function (err) {
+      if(err)
+      return {status:500};
+    });
+  }
+
   return {
-    
+    addEvent : addEvent,
+    getUserProfile : getUserProfile,
+    getAllEvents : getAllEvents,
+    getAllCityEvents : getAllCityEvents,
+    attendEvent : attendEvent,
+    interestEvent : interestEvent
   }
   
 })

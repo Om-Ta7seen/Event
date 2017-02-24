@@ -1,6 +1,7 @@
 <html><head>
 <style type="text/css">
 
+
   .navbar-events{
     margin-bottom: 0;
     padding-left: 30px;
@@ -34,6 +35,7 @@
     border-radius: 5px;
     border: 1px solid #dedede;
     padding: 0 !important;
+    margin-bottom: 30px;
   }
   
   .container-info {
@@ -77,6 +79,19 @@
     color: #136492 !important;
     text-decoration:  none !important;
   }
+
+.main-icon {
+  font-size: 60px !important;
+  padding : 20px;
+  color: #054163;
+}
+
+.main-intro span {
+  color: #B2121D;
+  font-size : 12pt;
+  font-weight: bold;
+}
+
 </style>
 
 <meta charset="utf-8">
@@ -141,15 +156,25 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li><a href="#/profile">My Profile</a></li>
-            <li><a href="#/signin">Sign In</a></li>
-            <li><a href="#/signup">Sign Up</a></li>
-            <li><a href="#/signout">Sign out</a></li>
+            <li><a href="#/">Main Page</a></li>
+            <li><a href="#/users/{{ $root.username }}" ng-if="$root.isLoggedIn">My Profile</a></li>
+            <li><a href="#/addEvent" ng-if="$root.isLoggedIn">Add New Event</a></li>
+            <li><a href="#/signin" ng-if="!$root.isLoggedIn">Sign In</a></li>
+            <li><a href="#/signup" ng-if="!$root.isLoggedIn">Sign Up</a></li>
+            <li><a href="#/signout" ng-if="$root.isLoggedIn">Sign out</a></li>
           </ul>
 
           <ul class="nav navbar-nav navbar-right">
             <li><a href="http://www.rbk.org" target="_blank">RBK</a></li>
-            <li><a href="https://github.com/montaserRahmani">M. Rahmani</a></li>
+                      <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Developers <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="https://github.com/montaserRahmani" target="_blank">M. Rahmani</a></li>
+              <li><a href="https://github.com/saeedhomsy" target="_blank">S. Alhomsi</a></li>
+              <li><a href="https://github.com/ZainabOmar" target="_blank">Z. Himmami</a></li>
+              <li><a href="https://github.com/HadeelBaloush" target="_blank">H. Baloush</a></li>
+            </ul>
+          </li>
 
           </ul>
         </div><!-- /.navbar-collapse -->

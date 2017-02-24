@@ -16,9 +16,18 @@ angular.module('event', [
       templateUrl: 'app/account/signin.html',
       controller: 'AuthController'
     })
-    .when('/profile/:user', {
+    .when('/signout', {
+      templateUrl: 'app/account/signout.html',
+      controller: 'AuthController'
+    })
+    .when('/users/:user', {
       templateUrl: 'app/profile/profile.html',
       controller: 'ProfileController',
+    })
+    .when('/addEvent', {
+      templateUrl: 'app/profile/addEvent.html',
+      controller: 'ProfileController',
+      authenticate: true
     })
     .when('/', {
       templateUrl: 'app/main/main.html',
@@ -46,11 +55,18 @@ angular.module('event', [
   return attach;
 
 })
-.run(function ($rootScope, $location, Auth) {
+.run(function ($rootScope, $location, Auth, $window) {
 
   $rootScope.$on('$routeChangeStart', function (evt, next, current) {
     if (next.$$route && next.$$route.authenticate && !Auth.isAuth()) {
       $location.path('/signin');
     }
   });
+
+  if($window.localStorage.getItem('com.event')){
+    $rootScope.isLoggedIn = true;
+    $rootScope.username = JSON.parse($window.localStorage.getItem('com.event')).username;
+  } else {
+    $rootScope.isLoggedIn = false;
+  }
 });
