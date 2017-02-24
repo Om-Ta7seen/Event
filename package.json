@@ -4,8 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "postinstall": "npm install -g nodemon",
-    "start": "nodemone server.js"
+    "postinstall": "npm install",
+    "start": "node server/server.js"
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
