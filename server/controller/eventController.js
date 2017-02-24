@@ -94,6 +94,7 @@ module.exports = {
   deleteEvent: function (req, res) {
     var id = req.body.id;
     new Event({id: id}).fetch().then(function(event){
+      console.log(event)
       event.destroy();
       res.json("Event deleted.");
     }).catch(function(err){
