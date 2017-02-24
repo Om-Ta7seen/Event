@@ -53,14 +53,15 @@ module.exports = {
     })
   },
 
+
   getAllCityEvents: function(req, res){
     var city = req.params.city;
-    Events.reset().fetch({city: city, withRelated: ['attend','interest']}).then(function(cityEvents){
+    Events.reset().query('where', 'city', city).fetch({withRelated: ['attend','interest']}).then(function(cityEvents){
       if(cityEvents.length){
         res.json(cityEvents);
       }
       else{
-        res.status(500).send("Unable to find events in ", city);
+        res.status(500).send("Unable to find events in " + city);
       }
     });
   },
