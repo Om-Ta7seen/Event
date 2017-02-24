@@ -14,7 +14,6 @@ module.exports = {
 
   addEvent:function (req, res){
     var event = req.body;
-    //what do u  want to be unique??!!
     new Event({eventName: event.eventName}).fetch().then(function(found){
       if(found){
         res.status(500).send("This event is already existed");
@@ -41,34 +40,22 @@ module.exports = {
     });
   },
 
-  // getAllEventUser : function(req,res){
-  //   var tokk = jwt.decode(req.query.tok, 'not your bussines!!')
-  //   Events.reset().fetch().then(function(events){
-  //     var UserEvents=[];
-  //     for(var i=0;i<events.models.length;i++){
-  //       if(tokk.eventtype===events.models[i].attributes.type){
-  //         UserEvents.push(events.models[i].attributes);
-  //       }
-  //     }
-  //     res.json(UserEvents)
-  //   })
-  // },
-
-
-
   getTopCityEvents: function (req, res){
     var city = req.params.city;
     
-    Events.reset().fetch({city: city}).then(function(events){
+    Events.reset().fetch({city: city, withRelated: ['attend','interest']}).then(function(topEvents){
         if(result.models.length){
+          res.json(topEvents);
         }
-        res.json(going);
+        else{
+        res.status(500).send("Unable to find events in ", city);
+      }
     })
   },
 
   getAllCityEvents: function(req, res){
     var city = req.params.city;
-    Events.reset().fetch({city: city}).then(function(cityEvents){
+    Events.reset().fetch({city: city, withRelated: ['attend','interest']}).then(function(cityEvents){
       if(cityEvents.length){
         res.json(cityEvents);
       }
@@ -100,15 +87,6 @@ module.exports = {
     }).catch(function(err){
       res.status(500).send("Unable to delete event ");
     });
-  },
-
-  getInterestEvents: function (req, res) {
-  
-
-  },
-
-  getGoingEvents: function (req, res) {
-
   }
 };
 
