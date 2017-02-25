@@ -29,6 +29,11 @@ angular.module('event', [
       controller: 'ProfileController',
       authenticate: true
     })
+    .when('/editEvent', {
+      templateUrl: 'app/profile/editEvent.html',
+      controller: 'ProfileController',
+      authenticate: true
+    })
     .when('/', {
       templateUrl: 'app/main/main.html',
       controller: 'MainController',

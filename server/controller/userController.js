@@ -16,9 +16,10 @@ var jwt = require('jwt-simple');
 module.exports = {
 
   signup:function (req,res) {
-    var user = req.body;
+    // var user = req.body;
     // var file = req.files;
     // console.log(file)
+    // console.log(req.body.files)
     util.hashpass(user.password,function(hash){
       user.password = hash;
     });

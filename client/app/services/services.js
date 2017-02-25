@@ -1,7 +1,7 @@
 angular.module('event.services', [])
 
 
-.factory('Auth', function ($http, $location, $window) {
+.factory('Auth', function ($http, $rootScope, $location, $window) {
  
   var signin = function (user) {
     return $http({
@@ -114,13 +114,57 @@ angular.module('event.services', [])
     });
   }
 
+  var editEvent = function(event){
+    return $http ({
+      method : 'PUT',
+      url : '/api/events/edit',
+      data : event
+    }).then(function (resp) {
+      return resp;
+    }).catch(function (err) {
+      if(err)
+      return {status:500};
+    });
+  }
+
+  var deleteEvent = function(eventId){
+    return $http ({
+      method : 'POST',
+      url : '/api/events/delete',
+      data : {id : eventId}
+    }).then(function (resp) {
+      return resp;
+    }).catch(function (err) {
+      if(err)
+      return {status:500};
+    });
+  }
+
   return {
     addEvent : addEvent,
     getUserProfile : getUserProfile,
     getAllEvents : getAllEvents,
     getAllCityEvents : getAllCityEvents,
     attendEvent : attendEvent,
-    interestEvent : interestEvent
+    interestEvent : interestEvent,
+    editEvent : editEvent,
+    deleteEvent: deleteEvent
   }
   
 })
+
+.factory('EventService', function($window, $location){
+  var event = {};
+  return {
+    setEvent : function(eventInfo){
+        event = eventInfo;
+        $location.path('/editEvent');
+    },
+    getEvent : function(){
+      return event;
+    },
+    clearEvent: function(){
+      event = {};
+    }
+  }
+});

@@ -7,16 +7,16 @@ var userIntersetEvent = require('./userInterestEvent.js');
 var knex = require('knex');
 
 var User = db.Model.extend({
-	tableName: 'users',
-	hasTimestamps: true,
-	event: function () {
+    tableName: 'users',
+    hasTimestamps: true,
+    event: function () {
         return this.hasMany(events, 'userId', 'id');
     },
     attend: function () {
-        return this.hasMany(userAttendEvent, 'eventId', 'id');
+        return this.belongsToMany(events, 'userAttendEvent', 'eventId', 'userId');
     },
     interest: function () {
-        return this.hasMany(userIntersetEvent, 'eventId', 'id');
+        return this.belongsToMany(events, 'userInterestEvent', 'eventId', 'userId');
     }
 });
 

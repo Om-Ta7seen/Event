@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
+  "engines": {
+    "node": ">=6.0.0"
+  },
   "scripts": {
-    "postinstall": "npm install -g nodemon",
-    "start": "nodemone server.js"
+    "start": "node server/server.js"
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",

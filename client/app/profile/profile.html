@@ -114,7 +114,8 @@
       <h1>Events created by {{ data[0].fullName }}</h1>
     </div>
 
-    <div class="col-md-8 col-md-offset-2 col-xs-12 event-container" ng-repeat="event in data[0].event">
+<div ng-repeat="event in data[0].event">
+    <div class="col-md-8 col-md-offset-2 col-xs-12 event-container">
   <div class="col-xs-12 container-img" ng-if="!event.imgUrl">
   </div>
     <div class="col-xs-12 container-img" style="background-image: url('{{ event.imgUrl }}');" ng-if="event.imgUrl">
@@ -146,6 +147,7 @@
       <span style="color: #b2121d"> <i class="fa fa-phone"></i><a href="tel:{{ event.contact }}"> {{ event.contact }} </a></span>
     </div>
   </div>
+
   </div>
 
 
@@ -159,7 +161,12 @@
     <span>Intrested: {{ event.interest.length }}</span>
   </div></div>
 </div>    
-
+<div class="col-md-8 col-md-offset-2 col-xs-12" ng-if="isUserProfile">
+    <div class="col-xs-6">
+      <button class="btn btn-primary" style="margin-right: 20px" ng-click="setEditEvent(event)">Edit event</button>
+        <button class="btn btn-danger" ng-click="deleteEvent(event.id)">Delete event</button></div>
+</div>
+</div>
 
 </div>
 
